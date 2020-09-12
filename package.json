@@ -1,0 +1,21 @@
+{
+  "name": "daddy-array",
+  "version": "1.0.1",
+  "description": "Really promising asynchronous and parallel work with large arrays without slowing down the GUI.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitaliy-du/daddy-array.git"
+  },
+  "author": "Vitaliy Dyukar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vitaliy-du/daddy-array/issues"
+  },
+  "homepage": "https://github.com/vitaliy-du/daddy-array#readme",
+  "types": "index.d.ts",
+  "keywords": ["array", "async", "asynchronous", "big array", "each", "enumerate", "forEach", "forIn", "forOf", "iterate", "large arrays", "loop", "promises"]
+}
