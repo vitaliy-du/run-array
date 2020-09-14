@@ -1,6 +1,6 @@
 {
   "name": "daddy-array",
-  "version": "1.0.1",
+  "version": "2.0.1",
   "description": "Really promising asynchronous and parallel work with large arrays without slowing down the GUI.",
   "main": "index.js",
   "scripts": {
