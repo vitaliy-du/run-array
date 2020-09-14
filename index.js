@@ -35,7 +35,10 @@ export function asyncEvery(arr, more) {
 
 export function asyncForEach(arr, more) {
     return new Promise(resolve => {
-        asyncEnum(arr, more, resolve, arr, arr, 0, null, (s, i) => more(arr[i], i, arr, s));
+        asyncEnum(arr, more, resolve, arr, arr, 0, null, (s, i, r) => {
+            more(arr[i], i, arr, s);
+            return r;
+        });
     });
 }
 
