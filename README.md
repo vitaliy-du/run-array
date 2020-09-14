@@ -105,10 +105,10 @@ import {asyncForEach} from "daddy-array";
 
 const arr = [];
 for (let i = 0; i < 0xFFFF; i++) arr.push(i);
-asyncForEach(arr, x => {
+asyncForEach(arr, (x, i, a, stop) => {
     // SOME ACTION WITH ARRAY ELEMENT X
-    return true; // false to cancel
-}).then(x => console.log(x ? 'SUCCESS' : 'CANCELLED'));
+    // stop() to stop enumeration
+}).then(x => console.log(x.result, x.success ? 'SUCCESS' : 'CANCELLED'));
 ```
 
 ## License
