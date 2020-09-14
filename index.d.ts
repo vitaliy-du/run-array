@@ -15,7 +15,7 @@ declare namespace DaddyArray {
      * @returns Promise resolves *{result: true or false, success: true or false if stop enumeration}*.
      */
     function asyncEvery<T = any>(arr: T[],
-        more: (x: T, i: number, arr: T[], stop?: () => void) => void): Promise<Result<boolean>>;
+        more: (x: T, i: number, arr: T[], stop: () => void) => void): Promise<Result<boolean>>;
 
     /**
      * Asynchronously performs the specified *more* action for each element in an array.
@@ -27,7 +27,7 @@ declare namespace DaddyArray {
      * @returns Promise resolves *{result: arr, success: true or false if stop enumeration}*.
      */
     function asyncForEach<T = any>(arr: T[],
-        more: (x: T, i: number, arr: T[], stop?: () => void) => void): Promise<Result<T[]>>;
+        more: (x: T, i: number, arr: T[], stop: () => void) => void): Promise<Result<T[]>>;
 
     /**
      * Asynchronously calls the specified *more* function on each element of an array, and returns an array that
@@ -39,7 +39,7 @@ declare namespace DaddyArray {
      * @returns Promise resolves *{result: new array, success: true or false if stop enumeration}*.
      */
     function asyncMap<T = any, R = any>(arr: T[],
-        more: (x: T, i: number, arr: T[], stop?: () => void) => void): Promise<Result<R>>;
+        more: (x: T, i: number, arr: T[], stop: () => void) => void): Promise<Result<R>>;
 
     /**
      * Asynchronously calls the specified *more* function for all the elements in an array.
@@ -55,7 +55,7 @@ declare namespace DaddyArray {
      * @returns Promise resolves *{result: accumulated result, success: true or false if stop enumeration}*.
      */
     function asyncReduce<T = any, R = any>(arr: T[],
-        more: (r: R, x: T, i: number, arr: T[], stop?: () => void) => void, init: R): Promise<Result<R>>;
+        more: (r: R, x: T, i: number, arr: T[], stop: () => void) => void, init: R): Promise<Result<R>>;
 
     /**
      * Asynchronously calls the specified *more* function for all the elements in an array, in descending order.
@@ -71,7 +71,7 @@ declare namespace DaddyArray {
      * @returns Promise resolves *{result: accumulated result, success: true or false if stop enumeration}*.
      */
     function asyncReduceRight<T = any, R = any>(arr: T[],
-        more: (r: R, x: T, i: number, arr: T[], stop?: () => void) => void, init: R): Promise<Result<R>>;
+        more: (r: R, x: T, i: number, arr: T[], stop: () => void) => void, init: R): Promise<Result<R>>;
 
     /**
      * Asynchronously determines whether the specified *more* function returns true for any element of an array.
@@ -84,7 +84,7 @@ declare namespace DaddyArray {
      * @returns Promise resolves *{result: true or false, success: true or false if stop enumeration}*.
      */
     function asyncSome<T = any>(arr: T[],
-        more: (x: T, i: number, arr: T[], stop?: () => void) => void): Promise<Result<boolean>>;
+        more: (x: T, i: number, arr: T[], stop: () => void) => void): Promise<Result<boolean>>;
 }
 
 export = DaddyArray;
