@@ -18,6 +18,60 @@ declare namespace DaddyArray {
         more: (x: T, i: number, arr: T[], stop: () => void) => boolean): Promise<Result<boolean>>;
 
     /**
+     * Asynchronously returns the elements of an array that meet the condition specified in a *more* function.
+     * The length of chunk to process calculated automatically to avoid slowing down the GUI.
+     *
+     * @param arr Array.
+     * @param more The filter function. Called one time for each element in the array. To stop enumeration call *stop*.
+     *
+     * @returns Promise resolves *{result: new array, success: true or false if stop enumeration}*.
+     */
+    function asyncFilter<T = any>(arr: T[],
+        more: (x: T, i: number, arr: T[], stop: () => void) => boolean): Promise<Result<T[]>>;
+
+    /**
+     * Returns the value of the first element in the array where predicate is true, and undefined otherwise.
+     * The length of chunk to process calculated automatically to avoid slowing down the GUI.
+     *
+     * @param arr Array.
+     * @param more The predicate method. Called one time for each element in the array, until it finds one where
+     * predicate returns true. If such an element is found, find immediately returns that element value. Otherwise, find
+     * returns undefined. To stop enumeration call *stop*.
+     * @param fromIndex The array index at which to begin the search. By default the search starts at index 0.
+     *
+     * @returns Promise resolves *{result: value of found element, success: true or false if stop enumeration}*.
+     */
+    function asyncFind<T = any>(arr: T[],
+        more: (x: T, i: number, arr: T[], stop: () => void) => boolean): Promise<Result<T>>;
+
+    /**
+     * Returns the index of the first element in the array where predicate is true, and -1 otherwise.
+     * The length of chunk to process calculated automatically to avoid slowing down the GUI.
+     *
+     * @param arr Array.
+     * @param more The predicate method. Called one time for each element in the array, until it finds one where
+     * predicate returns true. If such an element is found, find immediately returns that element index. Otherwise, find
+     * returns -1. To stop enumeration call *stop*.
+     * @param fromIndex The array index at which to begin the search. By default the search starts at index 0.
+     *
+     * @returns Promise resolves *{result: index of found element, success: true or false if stop enumeration}*.
+     */
+    function asyncIndexAt<T = any>(arr: T[], more: (x: T, i: number, arr: T[], stop: () => void) => boolean,
+        fromIndex?: number): Promise<Result<number>>;
+
+    /**
+     * Returns the index of the first occurrence of a value in an array. The length of chunk to process calculated
+     * automatically to avoid slowing down the GUI.
+     *
+     * @param arr Array.
+     * @param value The value to locate in the array.
+     * @param fromIndex The array index at which to begin the search. By default the search starts at index 0.
+     *
+     * @returns Promise resolves *{result: index of found element, success: true or false if stop enumeration}*.
+     */
+    function asyncIndexOf<T = any>(arr: T[], value: T, fromIndex?: number): Promise<Result<number>>;
+
+    /**
      * Asynchronously performs the specified *more* action for each element in an array.
      * The length of chunk to process is calculated automatically to avoid slowing down the GUI.
      *
