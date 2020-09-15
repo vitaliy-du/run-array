@@ -8,8 +8,10 @@ function asyncEnum(arr, more, resolve, defResult, initResult, enumFrom, getBreak
     var doLen = 1;
     var doStop = false;
     var result = initResult;
-    var stop = () => doStop = true;
-    var forEach = () => {
+    var stop = function () {
+        doStop = true;
+    };
+    var forEach = function () {
         var startTime = Date.now();
         for (var i = doFrom; i < Math.min(doFrom + doLen, arr.length); i++) {
             result = getResult(stop, i, result);
@@ -28,13 +30,30 @@ function asyncEnum(arr, more, resolve, defResult, initResult, enumFrom, getBreak
 }
 
 export function asyncEvery(arr, more) {
-    return new Promise(resolve => {
-        asyncEnum(arr, more, resolve, true, true, 0, r => !r, (s, i) => more(arr[i], i, arr, s));
+    return new Promise(function (resolve) {
+        asyncEnum(arr, more, resolve, true, true, 0, r => !r, (s, i) => !!more(arr[i], i, arr, s));
+    });
+}
+
+export function asyncFilter(arr, more) {
+    return new Promise(function (resolve) {
+        asyncEnum(arr, more, resolve, [], [], 0, null, (s, i, r) => {
+            var x = arr[i];
+            if (more(x, i, arr, s)) r.push(x);
+            return r;
+        });
+    });
+}
+
+export function asyncFind(arr, more) {
+    return new Promise(function (resolve) {
+        asyncEnum(arr, more, resolve, undefined, undefined, 0, r => r !== undefined,
+            (s, i, r) => more(arr[i], i, arr, s) ? arr[i] : r);
     });
 }
 
 export function asyncForEach(arr, more) {
-    return new Promise(resolve => {
+    return new Promise(function (resolve) {
         asyncEnum(arr, more, resolve, arr, arr, 0, null, (s, i, r) => {
             more(arr[i], i, arr, s);
             return r;
@@ -42,9 +61,22 @@ export function asyncForEach(arr, more) {
     });
 }
 
+export function asyncIndexAt(arr, more, fromIndex) {
+    return new Promise(function (resolve) {
+        asyncEnum(arr, more, resolve, -1, -1, fromIndex || 0, r => r > -1,
+            (s, i, r) => more(arr[i], i, arr, s) ? i : r);
+    });
+}
+
+export function asyncIndexOf(arr, value, fromIndex) {
+    return new Promise(function (resolve) {
+        asyncEnum(arr, true, resolve, -1, -1, fromIndex || 0, r => r > -1, (s, i, r) => arr[i] === value ? i : r);
+    });
+}
+
 export function asyncMap(arr, more) {
-    return new Promise(resolve => {
-        asyncEnum(arr, more, resolve, arr, [], 0, null, (s, i, r) => {
+    return new Promise(function (resolve) {
+        asyncEnum(arr, more, resolve, arr, new Array(arr.length), 0, null, (s, i, r) => {
             r[i] = more(arr[i], i, arr, s);
             return r;
         });
@@ -52,9 +84,9 @@ export function asyncMap(arr, more) {
 }
 
 export function asyncReduce(arr, more, init) {
-    return new Promise(resolve => {
-        var defInit = arr.length && (arguments.length < 3);
-        asyncEnum(arr, more, resolve, arr, defInit ? 1 : 0, defInit ? arr[0] : init, null, (s, i, r) => {
+    var defInit = arr.length && (arguments.length < 3);
+    return new Promise(function (resolve) {
+        asyncEnum(arr, more, resolve, undefined, defInit ? arr[0] : init, defInit ? 1 : 0, null, (s, i, r) => {
             r = more(r, arr[i], i, arr, s);
             return r;
         });
@@ -62,10 +94,10 @@ export function asyncReduce(arr, more, init) {
 }
 
 export function asyncReduceRight(arr, more, init) {
-    return new Promise(resolve => {
-        var arrLen = arr && arr.length;
-        var defInit = arrLen && (arguments.length < 3);
-        asyncEnum(arr, more, resolve, arr, defInit ? 1 : 0, defInit ? arr[0] : init, null, (s, i, r) => {
+    var arrLen = arr && arr.length;
+    var defInit = arrLen && (arguments.length < 3);
+    return new Promise(function (resolve) {
+        asyncEnum(arr, more, resolve, undefined, defInit ? arr[0] : init, defInit ? 1 : 0, null, (s, i, r) => {
             var index = arrLen - i - 1;
             r = more(r, arr[index], index, arr, s);
             return r;
@@ -74,7 +106,7 @@ export function asyncReduceRight(arr, more, init) {
 }
 
 export function asyncSome(arr, more) {
-    return new Promise(resolve => {
-        asyncEnum(arr, more, resolve, false, false, 0, r => r, (s, i) => more(arr[i], i, arr, s));
+    return new Promise(function (resolve) {
+        asyncEnum(arr, more, resolve, false, false, 0, r => r, (s, i) => !!more(arr[i], i, arr, s));
     });
 }

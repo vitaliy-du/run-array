@@ -4,6 +4,7 @@ DaddyArray
 [![Version](http://img.shields.io/npm/v/daddy-array.svg)](https://www.npmjs.org/package/daddy-array)
 
 Really promising asynchronous and parallel work with large arrays without slowing down the GUI.
+The length of chunk to process calculated automatically to avoid slowing down the GUI.
 
 Install with [npm](https://www.npmjs.com/):
 
@@ -27,6 +28,60 @@ npm install daddy-array --save
  */
 function asyncEvery<T = any>(arr: T[],
     more: (x: T, i: number, arr: T[], stop: () => void) => boolean): Promise<Result<boolean>>;
+
+/**
+ * Asynchronously returns the elements of an array that meet the condition specified in a *more* function.
+ * The length of chunk to process calculated automatically to avoid slowing down the GUI.
+ *
+ * @param arr Array.
+ * @param more The filter function. Called one time for each element in the array. To stop enumeration call *stop*.
+ *
+ * @returns Promise resolves *{result: new array, success: true or false if stop enumeration}*.
+ */
+function asyncFilter<T = any>(arr: T[],
+    more: (x: T, i: number, arr: T[], stop: () => void) => boolean): Promise<Result<T[]>>;
+
+/**
+ * Returns the value of the first element in the array where predicate is true, and undefined otherwise.
+ * The length of chunk to process calculated automatically to avoid slowing down the GUI.
+ *
+ * @param arr Array.
+ * @param more The predicate method. Called one time for each element in the array, until it finds one where
+ * predicate returns true. If such an element is found, find immediately returns that element value. Otherwise, find
+ * returns undefined. To stop enumeration call *stop*.
+ * @param fromIndex The array index at which to begin the search. By default the search starts at index 0.
+ *
+ * @returns Promise resolves *{result: value of found element, success: true or false if stop enumeration}*.
+ */
+function asyncFind<T = any>(arr: T[],
+    more: (x: T, i: number, arr: T[], stop: () => void) => boolean): Promise<Result<T>>;
+
+/**
+ * Returns the index of the first element in the array where predicate is true, and -1 otherwise.
+ * The length of chunk to process calculated automatically to avoid slowing down the GUI.
+ *
+ * @param arr Array.
+ * @param more The predicate method. Called one time for each element in the array, until it finds one where
+ * predicate returns true. If such an element is found, find immediately returns that element index. Otherwise, find
+ * returns -1. To stop enumeration call *stop*.
+ * @param fromIndex The array index at which to begin the search. By default the search starts at index 0.
+ *
+ * @returns Promise resolves *{result: index of found element, success: true or false if stop enumeration}*.
+ */
+function asyncIndexAt<T = any>(arr: T[], more: (x: T, i: number, arr: T[], stop: () => void) => boolean,
+    fromIndex?: number): Promise<Result<number>>;
+
+/**
+ * Returns the index of the first occurrence of a value in an array. The length of chunk to process calculated
+ * automatically to avoid slowing down the GUI.
+ *
+ * @param arr Array.
+ * @param value The value to locate in the array.
+ * @param fromIndex The array index at which to begin the search. By default the search starts at index 0.
+ *
+ * @returns Promise resolves *{result: index of found element, success: true or false if stop enumeration}*.
+ */
+function asyncIndexOf<T = any>(arr: T[], value: T, fromIndex?: number): Promise<Result<number>>;
 
 /**
  * Asynchronously performs the specified *more* action for each element in an array.
@@ -101,14 +156,22 @@ function asyncSome<T = any>(arr: T[],
 ## How to use
 
 ```tsx
-import {asyncForEach} from "daddy-array";
+import * as Daddy from "daddy-array";
 
 const arr = [];
-for (let i = 0; i < 0xFFFF; i++) arr.push(i);
-asyncForEach(arr, (x, i, a, stop) => {
+for (let i = 0; i < 0xFFFF; i++) arr.push(i + 1);
+Daddy.asyncForEach(arr, (x, i, a, stop) => {
     // SOME ACTION WITH ARRAY ELEMENT X
     // stop() to stop enumeration
-}).then(x => console.log(x.result, x.success ? 'SUCCESS' : 'CANCELLED'));
+}).then(x => console.log(x.result, x.success ? 'SUCCESS' : 'CANCELLED')).catch(e => console.error(e));
+Daddy.asyncEvery(arr, x => !!x).then(x => console.log(x.result, 'asyncEvery'));
+Daddy.asyncSome(arr, x => x == -1).then(x => console.log(x.result, 'asyncSome'));
+Daddy.asyncFind(arr, x => x == -1).then(x => console.log(x.result, 'asyncFind'));
+Daddy.asyncFind(arr, x => x == 10).then(x => console.log(x.result, 'asyncFind'));
+Daddy.asyncIndexAt(arr, x => x == 10).then(x => console.log(x.result, 'asyncIndexAt'));
+Daddy.asyncIndexOf(arr, 10).then(x => console.log(x.result, 'asyncIndexOf'));
+Daddy.asyncReduce(arr, r => ++r.count && r, {count: 0}).then(x => console.log(x.result, 'asyncReduce'));
+Daddy.asyncReduceRight(arr, r => ++r.count && r, {count: 0}).then(x => console.log(x.result, 'asyncReduceRight'));
 ```
 
 ## License
