@@ -78,9 +78,9 @@ export function asyncLastIndexOf(arr, value, fromIndex) {
 	var arrLen = arr && arr.length || 0;
 	return new Promise(function (resolve) {
 		asyncEnum(arr, true, resolve, -1, -1, -fromIndex || 0, r => r > -1, (s, i, r) => {
-            var index = arrLen - i - 1;
-            return arr[index] === value ? index : r;
-        });
+			var index = arrLen - i - 1;
+			return arr[index] === value ? index : r;
+		});
 	});
 }
 
