@@ -1,10 +1,9 @@
 DaddyArray
 ===========
 
-[![Version](http://img.shields.io/npm/v/daddy-array.svg)](https://www.npmjs.org/package/daddy-array)
+[![npm version][npm-image]][npm-url] [![license][license-image]][license-url] [![downloads][downloads-image]][downloads-url]
 
 Really promising asynchronous and parallel work with large arrays without slowing down the GUI.
-The length of chunk to process calculated automatically to avoid slowing down the GUI.
 
 Install with [npm](https://www.npmjs.com/):
 
@@ -68,8 +67,20 @@ function asyncFind<T = any>(arr: T[],
  *
  * @returns Promise resolves *{result: index of found element, success: true or false if stop enumeration}*.
  */
-function asyncIndexAt<T = any>(arr: T[], more: (x: T, i: number, arr: T[], stop: () => void) => boolean,
+function asyncFindIndex<T = any>(arr: T[], more: (x: T, i: number, arr: T[], stop: () => void) => boolean,
     fromIndex?: number): Promise<Result<number>>;
+
+/**
+ * Asynchronously performs the specified *more* action for each element in an array.
+ * The length of chunk to process is calculated automatically to avoid slowing down the GUI.
+ *
+ * @param arr Array.
+ * @param more Called one time for each element in the array. To stop enumeration call *stop*.
+ *
+ * @returns Promise resolves *{result: arr, success: true or false if stop enumeration}*.
+ */
+function asyncForEach<T = any>(arr: T[],
+    more: (x: T, i: number, arr: T[], stop: () => void) => void): Promise<Result<T[]>>;
 
 /**
  * Returns the index of the first occurrence of a value in an array. The length of chunk to process calculated
@@ -84,16 +95,16 @@ function asyncIndexAt<T = any>(arr: T[], more: (x: T, i: number, arr: T[], stop:
 function asyncIndexOf<T = any>(arr: T[], value: T, fromIndex?: number): Promise<Result<number>>;
 
 /**
- * Asynchronously performs the specified *more* action for each element in an array.
- * The length of chunk to process is calculated automatically to avoid slowing down the GUI.
+ * Returns the index of the first occurrence of a value in an array. The length of chunk to process calculated
+ * automatically to avoid slowing down the GUI.
  *
  * @param arr Array.
- * @param more Called one time for each element in the array. To stop enumeration call *stop*.
- *
- * @returns Promise resolves *{result: arr, success: true or false if stop enumeration}*.
+ * @param value The value to locate in the array.
+ * @param fromIndex The array index at which to begin the search. By default the search starts at the last index in
+ * the array.
+ * @returns Promise resolves *{result: index of found element, success: true or false if stop enumeration}*.
  */
-function asyncForEach<T = any>(arr: T[],
-    more: (x: T, i: number, arr: T[], stop: () => void) => void): Promise<Result<T[]>>;
+function asyncLastIndexOf<T = any>(arr: T[], value: T, fromIndex?: number): Promise<Result<number>>;
 
 /**
  * Asynchronously calls the specified *more* function on each element of an array, and returns an array that
@@ -168,8 +179,9 @@ Daddy.asyncEvery(arr, x => !!x).then(x => console.log(x.result, 'asyncEvery'));
 Daddy.asyncSome(arr, x => x == -1).then(x => console.log(x.result, 'asyncSome'));
 Daddy.asyncFind(arr, x => x == -1).then(x => console.log(x.result, 'asyncFind'));
 Daddy.asyncFind(arr, x => x == 10).then(x => console.log(x.result, 'asyncFind'));
-Daddy.asyncIndexAt(arr, x => x == 10).then(x => console.log(x.result, 'asyncIndexAt'));
+Daddy.asyncFindIndex(arr, x => x == 10).then(x => console.log(x.result, 'asyncFindIndex'));
 Daddy.asyncIndexOf(arr, 10).then(x => console.log(x.result, 'asyncIndexOf'));
+Daddy.asyncLastIndexOf(arr, 10).then(x => console.log(x.result, 'asyncLastIndexOf'));
 Daddy.asyncReduce(arr, r => ++r.count && r, {count: 0}).then(x => console.log(x.result, 'asyncReduce'));
 Daddy.asyncReduceRight(arr, r => ++r.count && r, {count: 0}).then(x => console.log(x.result, 'asyncReduceRight'));
 ```
@@ -177,3 +189,10 @@ Daddy.asyncReduceRight(arr, r => ++r.count && r, {count: 0}).then(x => console.l
 ## License
 
 [MIT](LICENSE). Copyright (c) 2020 Vitaliy Dyukar.
+
+[npm-image]: https://img.shields.io/npm/v/daddy-array.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/daddy-array
+[license-image]: https://img.shields.io/npm/l/daddy-array.svg?style=flat-square
+[license-url]: https://npmjs.org/package/daddy-array
+[downloads-image]: http://img.shields.io/npm/dm/daddy-array.svg?style=flat-square
+[downloads-url]: https://npmjs.org/package/daddy-array
