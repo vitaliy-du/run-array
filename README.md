@@ -4,7 +4,7 @@ SysArray
 [![npm version][npm-image]][npm-url] [![license][license-image]][license-url] [![downloads][downloads-image]][downloads-url]
 
 Really promising asynchronous and parallel work with large arrays without slowing down the GUI.
-The length of chunk to process is calculated automatically to avoid slowing down the GUI.
+The length of chunk to process automatically calculated to avoid slowing down the GUI.
 
 Install with [npm](https://www.npmjs.com/):
 
@@ -13,12 +13,47 @@ npm:
 npm install sys-array --save
 ```
 
+## How to use
+
+```tsx
+import * as SysArray from "sys-array";
+
+const arr = [];
+for (let i = 0; i < 0xFFFF; i++) arr.push(i + 1);
+SysArray.asyncForEach(arr, (x, i, a, stop) => {
+    // SOME ACTION WITH ARRAY ELEMENT X
+    // call stop() to stop
+}).then(x => console.log('asyncForEach', x.success));
+SysArray.asyncEvery(arr, x => !!x).then(x => console.log('asyncEvery', x.result));
+SysArray.asyncSome(arr, x => x == -1).then(x => console.log('asyncSome', x.result));
+SysArray.asyncFind(arr, x => x == -1).then(x => console.log('asyncFind', x.result));
+SysArray.asyncFind(arr, x => x == 10).then(x => console.log('asyncFind', x.result));
+SysArray.asyncFindIndex(arr, x => x == 10).then(x => console.log('asyncFindIndex', x.result));
+SysArray.asyncIndexOf(arr, 10).then(x => console.log('asyncIndexOf', x.result));
+SysArray.asyncLastIndexOf(arr, 10).then(x => console.log('asyncLastIndexOf', x.result));
+SysArray.asyncReduce(arr, r => ++r.count && r, {count: 0}).then(x => console.log('asyncReduce', x.result));
+SysArray.asyncReduceRight(arr, r => ++r.count && r, {count: 0}).then(x => console.log('asyncReduceRight', x.result));
+
+SysArray.prlForEach(4, arr, (done, x, i, a, stop) => {
+    // SOME ACTION WITH ARRAY ELEMENT X
+    // call stop() to stop
+    done();
+}).then(x => console.log('prlForEach', x.success));
+SysArray.prlEvery(4, arr, (done, x) => done(!!x)).then(x => console.log('prlEvery', x.result));
+SysArray.prlSome(4, arr, (done, x) => done(x == -1)).then(x => console.log('prlSome', x.result));
+SysArray.prlFind(4, arr, (done, x) => done(x == -1)).then(x => console.log('prlFind', x.result));
+SysArray.prlFind(4, arr, (done, x) => done(x == 10)).then(x => console.log('prlFind', x.result));
+SysArray.prlFindIndex(4, arr, (done, x) => done(x == 10), 0).then(x => console.log('prlFindIndex', x.result));
+SysArray.prlReduce(4, arr, (done, r) => done(++r.count && r), {count: 0}).then(x => console.log('prlReduce', x.result));
+SysArray.prlReduceRight(4, arr, (done, r) => done(++r.count && r), {count: 0}).then(x => console.log('prlReduceRight', x.result));
+```
+
 ## Doc
 
 ```ts
 /**
  * Asynchronously determines whether all the members of an array satisfy the specified test.
- * The length of chunk to process is calculated automatically to avoid slowing down the GUI.
+ * The length of chunk to process automatically calculated to avoid slowing down the GUI.
  *
  * @param arr Array.
  * @param more Called one time for each element in the array until returns a value which is coercible to the Boolean
@@ -73,7 +108,7 @@ function asyncFindIndex<T = any>(arr: T[], more: (x: T, i: number, arr: T[],
 
 /**
  * Asynchronously performs the specified *more* action for each element in an array.
- * The length of chunk to process is calculated automatically to avoid slowing down the GUI.
+ * The length of chunk to process automatically calculated to avoid slowing down the GUI.
  *
  * @param arr Array.
  * @param more Called one time for each element in the array. To stop enumeration call *stop*.
@@ -110,7 +145,7 @@ function asyncLastIndexOf<T = any>(arr: T[], value: T, fromIndex?: number): Prom
 
 /**
  * Asynchronously calls the specified *more* function on each element of an array, and returns an array that
- * contains the results. The length of chunk to process is calculated automatically to avoid slowing down the GUI.
+ * contains the results. The length of chunk to process automatically calculated to avoid slowing down the GUI.
  *
  * @param arr Array.
  * @param more Called one time for each element in the array. To stop enumeration call *stop*.
@@ -123,7 +158,7 @@ function asyncMap<T = any, R = any>(arr: T[], more: (x: T, i: number, arr: T[],
 /**
  * Asynchronously calls the specified *more* function for all the elements in an array.
  * The return value of the *more* function is the accumulated result, and is provided as an argument in the next
- * call to the *more* function. The length of chunk to process is calculated automatically to avoid slowing down
+ * call to the *more* function. The length of chunk to process automatically calculated to avoid slowing down
  * the GUI.
  *
  * @param arr Array.
@@ -139,7 +174,7 @@ function asyncReduce<T = any, R = any>(arr: T[], more: (r: R, x: T, i: number, a
 /**
  * Asynchronously calls the specified *more* function for all the elements in an array, in descending order.
  * The return value of the *more* function is the accumulated result, and is provided as an argument in the next
- * call to the *more* function. The length of chunk to process is calculated automatically to avoid slowing down
+ * call to the *more* function. The length of chunk to process automatically calculated to avoid slowing down
  * the GUI.
  *
  * @param arr Array.
@@ -154,7 +189,7 @@ function asyncReduceRight<T = any, R = any>(arr: T[], more: (r: R, x: T, i: numb
 
 /**
  * Asynchronously determines whether the specified *more* function returns true for any element of an array.
- * The length of chunk to process is calculated automatically to avoid slowing down the GUI.
+ * The length of chunk to process automatically calculated to avoid slowing down the GUI.
  *
  * @param arr Array.
  * @param more Called one time for each element in the array until returns a value which is coercible to the Boolean
@@ -167,7 +202,7 @@ function asyncSome<T = any>(arr: T[], more: (x: T, i: number, arr: T[],
 
 /**
  * Async-parallel determines whether all the members of an array satisfy the specified test.
- * The length of chunk to process is calculated automatically to avoid slowing down the GUI.
+ * The length of chunk to process automatically calculated to avoid slowing down the GUI.
  *
  * @param prl Max count of parallel operations.
  * @param arr Array.
@@ -226,7 +261,7 @@ function prlFindIndex<T = any>(prl: number, arr: T[], more: (done: (result: bool
 
 /**
  * Async-parallel performs the specified *more* action for each element in an array.
- * The length of chunk to process is calculated automatically to avoid slowing down the GUI.
+ * The length of chunk to process automatically calculated to avoid slowing down the GUI.
  *
  * @param prl Max count of parallel operations.
  * @param arr Array.
@@ -239,7 +274,7 @@ function prlForEach<T = any>(prl: number, arr: T[], more: (done: () => void, x: 
 
 /**
  * Async-parallel calls the specified *more* function on each element of an array, and returns an array that
- * contains the results. The length of chunk to process is calculated automatically to avoid slowing down the GUI.
+ * contains the results. The length of chunk to process automatically calculated to avoid slowing down the GUI.
  *
  * @param prl Max count of parallel operations.
  * @param arr Array.
@@ -253,7 +288,7 @@ function prlMap<T = any, R = any>(prl: number, arr: T[], more: (done: (result: R
 /**
  * Async-parallel calls the specified *more* function for all the elements in an array.
  * The return value of the *more* function is the accumulated result, and is provided as an argument in the next
- * call to the *more* function. The length of chunk to process is calculated automatically to avoid slowing down
+ * call to the *more* function. The length of chunk to process automatically calculated to avoid slowing down
  * the GUI.
  *
  * @param prl Max count of parallel operations.
@@ -270,7 +305,7 @@ function prlReduce<T = any, R = any>(prl: number, arr: T[], more: (done: (result
 /**
  * Async-parallel calls the specified *more* function for all the elements in an array, in descending order.
  * The return value of the *more* function is the accumulated result, and is provided as an argument in the next
- * call to the *more* function. The length of chunk to process is calculated automatically to avoid slowing down
+ * call to the *more* function. The length of chunk to process automatically calculated to avoid slowing down
  * the GUI.
  *
  * @param prl Max count of parallel operations.
@@ -286,7 +321,7 @@ function prlReduceRight<T = any, R = any>(prl: number, arr: T[], more: (done: (r
 
 /**
  * Async-parallel determines whether the specified *more* function returns true for any element of an array.
- * The length of chunk to process is calculated automatically to avoid slowing down the GUI.
+ * The length of chunk to process automatically calculated to avoid slowing down the GUI.
  *
  * @param prl Max count of parallel operations.
  * @param arr Array.
@@ -297,41 +332,6 @@ function prlReduceRight<T = any, R = any>(prl: number, arr: T[], more: (done: (r
  */
 function prlSome<T = any>(prl: number, arr: T[], more: (done: (result: boolean) => void, x: T, i: number,
     arr: T[], stop: () => void) => void): Promise<Result<boolean>>;
-```
-
-## How to use
-
-```tsx
-import * as SysArray from "sys-array";
-
-const arr = [];
-for (let i = 0; i < 0xFFFF; i++) arr.push(i + 1);
-SysArray.asyncForEach(arr, (x, i, a, stop) => {
-    // SOME ACTION WITH ARRAY ELEMENT X
-    // call stop() to stop
-}).then(x => console.log('asyncForEach', x.success));
-SysArray.asyncEvery(arr, x => !!x).then(x => console.log('asyncEvery', x.result));
-SysArray.asyncSome(arr, x => x == -1).then(x => console.log('asyncSome', x.result));
-SysArray.asyncFind(arr, x => x == -1).then(x => console.log('asyncFind', x.result));
-SysArray.asyncFind(arr, x => x == 10).then(x => console.log('asyncFind', x.result));
-SysArray.asyncFindIndex(arr, x => x == 10).then(x => console.log('asyncFindIndex', x.result));
-SysArray.asyncIndexOf(arr, 10).then(x => console.log('asyncIndexOf', x.result));
-SysArray.asyncLastIndexOf(arr, 10).then(x => console.log('asyncLastIndexOf', x.result));
-SysArray.asyncReduce(arr, r => ++r.count && r, {count: 0}).then(x => console.log('asyncReduce', x.result));
-SysArray.asyncReduceRight(arr, r => ++r.count && r, {count: 0}).then(x => console.log('asyncReduceRight', x.result));
-
-SysArray.prlForEach(4, arr, (done, x, i, a, stop) => {
-    // SOME ACTION WITH ARRAY ELEMENT X
-    // call stop() to stop
-    done();
-}).then(x => console.log('prlForEach', x.success));
-SysArray.prlEvery(4, arr, (done, x) => done(!!x)).then(x => console.log('prlEvery', x.result));
-SysArray.prlSome(4, arr, (done, x) => done(x == -1)).then(x => console.log('prlSome', x.result));
-SysArray.prlFind(4, arr, (done, x) => done(x == -1)).then(x => console.log('prlFind', x.result));
-SysArray.prlFind(4, arr, (done, x) => done(x == 10)).then(x => console.log('prlFind', x.result));
-SysArray.prlFindIndex(4, arr, (done, x) => done(x == 10), 0).then(x => console.log('prlFindIndex', x.result));
-SysArray.prlReduce(4, arr, (done, r) => done(++r.count && r), {count: 0}).then(x => console.log('prlReduce', x.result));
-SysArray.prlReduceRight(4, arr, (done, r) => done(++r.count && r), {count: 0}).then(x => console.log('prlReduceRight', x.result));
 ```
 
 ## License
