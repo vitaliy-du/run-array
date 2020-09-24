@@ -1,4 +1,4 @@
-declare namespace DaddyArray {
+declare namespace SysArray {
 	type Result<T> = {
 		result: T;
 		success: boolean;
@@ -287,5 +287,5 @@ declare namespace DaddyArray {
 		arr: T[], stop: () => void) => void): Promise<Result<boolean>>;
 }
 
-export = DaddyArray;
-export as namespace DaddyArray;
+export = SysArray;
+export as namespace SysArray;

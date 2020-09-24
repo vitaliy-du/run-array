@@ -1,15 +1,16 @@
-DaddyArray
+SysArray
 ===========
 
 [![npm version][npm-image]][npm-url] [![license][license-image]][license-url] [![downloads][downloads-image]][downloads-url]
 
 Really promising asynchronous and parallel work with large arrays without slowing down the GUI.
+The length of chunk to process is calculated automatically to avoid slowing down the GUI.
 
 Install with [npm](https://www.npmjs.com/):
 
 npm:
 ```sh
-npm install daddy-array --save
+npm install sys-array --save
 ```
 
 ## Doc
@@ -301,45 +302,45 @@ function prlSome<T = any>(prl: number, arr: T[], more: (done: (result: boolean) 
 ## How to use
 
 ```tsx
-import * as DaddyArray from "daddy-array";
+import * as SysArray from "sys-array";
 
 const arr = [];
 for (let i = 0; i < 0xFFFF; i++) arr.push(i + 1);
-DaddyArray.asyncForEach(arr, (x, i, a, stop) => {
+SysArray.asyncForEach(arr, (x, i, a, stop) => {
     // SOME ACTION WITH ARRAY ELEMENT X
     // call stop() to stop
 }).then(x => console.log('asyncForEach', x.success));
-DaddyArray.asyncEvery(arr, x => !!x).then(x => console.log('asyncEvery', x.result));
-DaddyArray.asyncSome(arr, x => x == -1).then(x => console.log('asyncSome', x.result));
-DaddyArray.asyncFind(arr, x => x == -1).then(x => console.log('asyncFind', x.result));
-DaddyArray.asyncFind(arr, x => x == 10).then(x => console.log('asyncFind', x.result));
-DaddyArray.asyncFindIndex(arr, x => x == 10).then(x => console.log('asyncFindIndex', x.result));
-DaddyArray.asyncIndexOf(arr, 10).then(x => console.log('asyncIndexOf', x.result));
-DaddyArray.asyncLastIndexOf(arr, 10).then(x => console.log('asyncLastIndexOf', x.result));
-DaddyArray.asyncReduce(arr, r => ++r.count && r, {count: 0}).then(x => console.log('asyncReduce', x.result));
-DaddyArray.asyncReduceRight(arr, r => ++r.count && r, {count: 0}).then(x => console.log('asyncReduceRight', x.result));
+SysArray.asyncEvery(arr, x => !!x).then(x => console.log('asyncEvery', x.result));
+SysArray.asyncSome(arr, x => x == -1).then(x => console.log('asyncSome', x.result));
+SysArray.asyncFind(arr, x => x == -1).then(x => console.log('asyncFind', x.result));
+SysArray.asyncFind(arr, x => x == 10).then(x => console.log('asyncFind', x.result));
+SysArray.asyncFindIndex(arr, x => x == 10).then(x => console.log('asyncFindIndex', x.result));
+SysArray.asyncIndexOf(arr, 10).then(x => console.log('asyncIndexOf', x.result));
+SysArray.asyncLastIndexOf(arr, 10).then(x => console.log('asyncLastIndexOf', x.result));
+SysArray.asyncReduce(arr, r => ++r.count && r, {count: 0}).then(x => console.log('asyncReduce', x.result));
+SysArray.asyncReduceRight(arr, r => ++r.count && r, {count: 0}).then(x => console.log('asyncReduceRight', x.result));
 
-DaddyArray.prlForEach(4, arr, (done, x, i, a, stop) => {
+SysArray.prlForEach(4, arr, (done, x, i, a, stop) => {
     // SOME ACTION WITH ARRAY ELEMENT X
     // call stop() to stop
     done();
 }).then(x => console.log('prlForEach', x.success));
-DaddyArray.prlEvery(4, arr, (done, x) => done(!!x)).then(x => console.log('prlEvery', x.result));
-DaddyArray.prlSome(4, arr, (done, x) => done(x == -1)).then(x => console.log('prlSome', x.result));
-DaddyArray.prlFind(4, arr, (done, x) => done(x == -1)).then(x => console.log('prlFind', x.result));
-DaddyArray.prlFind(4, arr, (done, x) => done(x == 10)).then(x => console.log('prlFind', x.result));
-DaddyArray.prlFindIndex(4, arr, (done, x) => done(x == 10), 0).then(x => console.log('prlFindIndex', x.result));
-DaddyArray.prlReduce(4, arr, (done, r) => done(++r.count && r), {count: 0}).then(x => console.log('prlReduce', x.result));
-DaddyArray.prlReduceRight(4, arr, (done, r) => done(++r.count && r), {count: 0}).then(x => console.log('prlReduceRight', x.result));
+SysArray.prlEvery(4, arr, (done, x) => done(!!x)).then(x => console.log('prlEvery', x.result));
+SysArray.prlSome(4, arr, (done, x) => done(x == -1)).then(x => console.log('prlSome', x.result));
+SysArray.prlFind(4, arr, (done, x) => done(x == -1)).then(x => console.log('prlFind', x.result));
+SysArray.prlFind(4, arr, (done, x) => done(x == 10)).then(x => console.log('prlFind', x.result));
+SysArray.prlFindIndex(4, arr, (done, x) => done(x == 10), 0).then(x => console.log('prlFindIndex', x.result));
+SysArray.prlReduce(4, arr, (done, r) => done(++r.count && r), {count: 0}).then(x => console.log('prlReduce', x.result));
+SysArray.prlReduceRight(4, arr, (done, r) => done(++r.count && r), {count: 0}).then(x => console.log('prlReduceRight', x.result));
 ```
 
 ## License
 
 [MIT](LICENSE). Copyright (c) 2020 Vitaliy Dyukar.
 
-[npm-image]: https://img.shields.io/npm/v/daddy-array.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/daddy-array
-[license-image]: https://img.shields.io/npm/l/daddy-array.svg?style=flat-square
-[license-url]: https://npmjs.org/package/daddy-array
-[downloads-image]: http://img.shields.io/npm/dm/daddy-array.svg?style=flat-square
-[downloads-url]: https://npmjs.org/package/daddy-array
+[npm-image]: https://img.shields.io/npm/v/sys-array.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/sys-array
+[license-image]: https://img.shields.io/npm/l/sys-array.svg?style=flat-square
+[license-url]: https://npmjs.org/package/sys-array
+[downloads-image]: http://img.shields.io/npm/dm/sys-array.svg?style=flat-square
+[downloads-url]: https://npmjs.org/package/sys-array
