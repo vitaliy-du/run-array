@@ -1,6 +1,6 @@
 {
   "name": "sys-array",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "Really promising asynchronous and parallel work with large arrays without slowing down the GUI.",
   "main": "index.js",
   "scripts": {
