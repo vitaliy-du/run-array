@@ -1,7 +1,7 @@
 {
   "name": "sys-array",
-  "version": "3.1.2",
-  "description": "Really promising asynchronous and parallel work with large arrays without slowing down the GUI.",
+  "version": "3.1.3",
+  "description": "Asynchronous and parallel work with large arrays without slowing down the GUI.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,5 +17,5 @@
   },
   "homepage": "https://github.com/vitaliy-du/sys-array#readme",
   "types": "index.d.ts",
-  "keywords": ["array", "async", "asynchronous", "big array", "each", "enumerate", "forEach", "forIn", "forOf", "iterate", "large arrays", "loop"]
+  "keywords": ["array", "async", "asynchronous", "async array", "async forEach", "big array", "enumerate", "forEach", "iterate", "large arrays", "loop"]
 }
