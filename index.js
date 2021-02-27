@@ -216,3 +216,26 @@ export function prlSome(prl, arr, next) {
 	return prlEnum(prl, arr, next, 0, r => r, false, false,
 		(done, s, i) => next(done, arr[i], i, arr, s), x => !!x);
 }
+
+export function extendArrayPrototype() {
+	Array.prototype.asyncEvery = function (next) { return asyncEvery(this, next); };
+	Array.prototype.asyncFilter = function (next) { return asyncFilter(this, next); };
+	Array.prototype.asyncFind = function (next) { return asyncFind(this, next); };
+	Array.prototype.asyncFindIndex = function (next, fromIndex) { return asyncFindIndex(this, next, fromIndex); };
+	Array.prototype.asyncForEach = function (next) { return asyncForEach(this, next); };
+	Array.prototype.asyncIndexBy = function (value, fromIndex) { return asyncIndexBy(this, value, fromIndex); };
+	Array.prototype.asyncLastIndexBy = function (value, fromIndex) { return asyncLastIndexBy(this, value, fromIndex); };
+	Array.prototype.asyncMap = function (next) { return asyncMap(this, next); };
+	Array.prototype.asyncReduce = function (next, init) { return asyncReduce(this, next, init); };
+	Array.prototype.asyncReduceRight = function (next, init) { return asyncReduceRight(this, next, init); };
+	Array.prototype.asyncSome = function (next) { return asyncSome(this, next); };
+	Array.prototype.prlEvery = function (prl, next) { return prlEvery(prl, this, next); };
+	Array.prototype.prlFilter = function (prl, next) { return prlFilter(prl, this, next); };
+	Array.prototype.prlFind = function (prl, next) { return prlFind(prl, this, next); };
+	Array.prototype.prlFindIndex = function (prl, next, fromIndex) { return prlFindIndex(prl, this, next, fromIndex); };
+	Array.prototype.prlForEach = function (prl, next) { return prlForEach(prl, this, next); };
+	Array.prototype.prlMap = function (prl, next) { return prlMap(prl, this, next); };
+	Array.prototype.prlReduce = function (prl, next, init) { return prlReduce(prl, this, next, init); };
+	Array.prototype.prlReduceRight = function (prl, next, init) { return prlReduceRight(prl, this, next, init); };
+	Array.prototype.prlSome = function (prl, next) { return prlSome(prl, this, next); };
+}
