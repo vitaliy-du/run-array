@@ -268,3 +268,8 @@ export const prlReduceRight: <T = any, R = any>(prl: number, arr: T[], next: (do
  */
 export const prlSome: <T = any>(prl: number, arr: T[], next: (done: (result: boolean) => void, x: T, i: number,
 	arr: T[], stop: () => void) => void) => Promise<ArrayResult<boolean>>;
+
+/**
+ * Extend array prototype.
+ */
+export const extendArrayPrototype: () => void;

@@ -1,4 +1,4 @@
-SysArray
+run-array
 ===========
 
 [![npm version][npm-image]][npm-url] [![license][license-image]][license-url] [![downloads][downloads-image]][downloads-url]
@@ -6,17 +6,23 @@ SysArray
 Asynchronous and parallel work with large arrays without slowing down the GUI.
 The length of chunk to process automatically calculated to avoid slowing down the GUI.
 
+Allow to you process array or run functions of array in serially/parallel (you can specify number of parallel
+operations), without waiting until the previous function has completed.
+
+You can process big array without slowing down the GUI, just write process func for one element. It automatically
+calculates chunk size for optimal array process.
+
 Install with [npm](https://www.npmjs.com/):
 
 npm:
 ```sh
-npm install sys-array --save
+npm install run-array --save
 ```
 
 ## How to use
 
 ```tsx
-import * as Array from "sys-array";
+import * as Array from "run-array";
 
 const arr = [];
 for (let i = 0; i < 0xFFFF; i++) arr.push(i + 1);
@@ -34,6 +40,7 @@ Array.asyncLastIndexBy(arr, 10).then(x => console.log('asyncLastIndexOf', x.resu
 Array.asyncReduce(arr, r => ++r.count && r, {count: 0}).then(x => console.log('asyncReduce', x.result)); // asyncReduce {count: 65535}
 Array.asyncReduceRight(arr, r => ++r.count && r, {count: 0}).then(x => console.log('asyncReduceRight', x.result)); // asyncReduceRight {count: 65535}
 
+// Four parallel operations
 Array.prlForEach(4, arr, (done, x, i, a, stop) => {
     // SOME ACTION WITH ARRAY ELEMENT X
     // call stop() to stop iterations. It return success false.
@@ -46,6 +53,37 @@ Array.prlFind(4, arr, (done, x) => done(x == 10)).then(x => console.log('prlFind
 Array.prlFindIndex(4, arr, (done, x) => done(x == 10), 0).then(x => console.log('prlFindIndex', x.result)); // prlFindIndex 9
 Array.prlReduce(4, arr, (done, r) => done(++r.count && r), {count: 0}).then(x => console.log('prlReduce', x.result)); // prlReduce {count: 65535}
 Array.prlReduceRight(4, arr, (done, r) => done(++r.count && r), {count: 0}).then(x => console.log('prlReduceRight', x.result)); // prlReduceRight {count: 65535}
+
+// Or you can extend Array prototype
+Array.extendArrayPrototype();
+
+arr.asyncForEach((x, i, a, stop) => {
+    // SOME ACTION WITH ARRAY ELEMENT X
+    // call stop() to stop iteration. It return success false.
+}).then(x => console.log('asyncForEach', x.success)); // asyncForEach true
+arr.asyncEvery(x => !!x).then(x => console.log('asyncEvery', x.result)); // asyncEvery true
+arr.asyncSome(x => x == -1).then(x => console.log('asyncSome', x.result)); // asyncSome false
+arr.asyncFind(x => x == -1).then(x => console.log('asyncFind', x.result)); // asyncFind undefined
+arr.asyncFind(x => x == 10).then(x => console.log('asyncFind', x.result)); // asyncFind 10
+arr.asyncFindIndex(x => x == 10).then(x => console.log('asyncFindIndex', x.result)); // asyncFindIndex 9
+arr.asyncIndexBy(10).then(x => console.log('asyncIndexOf', x.result)); // asyncIndexOf 9
+arr.asyncLastIndexBy(10).then(x => console.log('asyncLastIndexOf', x.result)); // asyncLastIndexOf 9
+arr.asyncReduce(r => ++r.count && r, {count: 0}).then(x => console.log('asyncReduce', x.result)); // asyncReduce {count: 65535}
+arr.asyncReduceRight(r => ++r.count && r, {count: 0}).then(x => console.log('asyncReduceRight', x.result)); // asyncReduceRight {count: 65535}
+
+arr.prlForEach(4, (done, x, i, a, stop) => {
+    // SOME ACTION WITH ARRAY ELEMENT X
+    // call stop() to stop iterations. It return success false.
+    done();
+}).then(x => console.log('prlForEach', x.success)); // prlForEach true
+arr.prlEvery(4, (done, x) => done(!!x)).then(x => console.log('prlEvery', x.result)); // prlEvery true
+arr.prlSome(4, (done, x) => done(x == -1)).then(x => console.log('prlSome', x.result)); // prlSome false
+arr.prlFind(4, (done, x) => done(x == -1)).then(x => console.log('prlFind', x.result)); // prlFind undefined
+arr.prlFind(4, (done, x) => done(x == 10)).then(x => console.log('prlFind', x.result)); // prlFind 10
+arr.prlFindIndex(4, (done, x) => done(x == 10), 0).then(x => console.log('prlFindIndex', x.result)); // prlFindIndex 9
+arr.prlReduce(4, (done, r) => done(++r.count && r), {count: 0}).then(x => console.log('prlReduce', x.result)); // prlReduce {count: 65535}
+arr.prlReduceRight(4, (done, r) => done(++r.count && r), {count: 0}).then(x => console.log('prlReduceRight', x.result)); // prlReduceRight {count: 65535}
+
 ```
 
 ## Doc
@@ -322,9 +360,9 @@ export const prlSome: <T = any>(prl: number, arr: T[], next: (done: (result: boo
 
 [MIT](LICENSE). Copyright (c) 2021 Vitaliy Dyukar.
 
-[npm-image]: https://img.shields.io/npm/v/sys-array.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/sys-array
-[license-image]: https://img.shields.io/npm/l/sys-array.svg?style=flat-square
-[license-url]: https://npmjs.org/package/sys-array
-[downloads-image]: http://img.shields.io/npm/dm/sys-array.svg?style=flat-square
-[downloads-url]: https://npmjs.org/package/sys-array
+[npm-image]: https://img.shields.io/npm/v/run-array.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/run-array
+[license-image]: https://img.shields.io/npm/l/run-array.svg?style=flat-square
+[license-url]: https://npmjs.org/package/run-array
+[downloads-image]: http://img.shields.io/npm/dm/run-array.svg?style=flat-square
+[downloads-url]: https://npmjs.org/package/run-array
